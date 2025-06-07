@@ -14,7 +14,7 @@ img = cv2.imread('Feijoes-editados/img1.jpg')
 
 # Pré-processamento
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-blur = cv2.GaussianBlur(gray, (7, 7), 0)
+blur = cv2.GaussianBlur(gray, (17, 17), 0)
 edges = cv2.Canny(blur, 50, 150)
 
 # Contornos
@@ -25,8 +25,8 @@ img_contornos = img.copy()
 
 # Desenha os contornos na imagem (verde, espessura 2) e escreve o número do contorno
 for i, contorno in enumerate(contornos):
-    area = cv2.contourArea(contorno)
-    if 0 <= area <= 20000:
+    perimetro = cv2.arcLength(contorno, True)
+    if 200 <= perimetro <= 750:
         cv2.drawContours(img_contornos, [contorno], -1, (0, 255, 0), 2)
         
         # Calcula centro do contorno para posicionar o texto
@@ -40,7 +40,9 @@ for i, contorno in enumerate(contornos):
 
         # Escreve o número do contorno perto do centro (pode ajustar deslocamento)
         cv2.putText(img_contornos, str(i), (cx + 5, cy - 5), cv2.FONT_HERSHEY_SIMPLEX,
-                    2, (0, 0, 255), 2)
+                    2, (255, 0, 0), 4)
+    else:
+        print(cv2.arcLength(contorno, True))
 
 # Redimensiona para exibição
 img_contornos_resized = rescaleFrame(img_contornos, 0.20)
@@ -55,6 +57,9 @@ for contorno in contornos:
 
 mascara2 = rescaleFrame(mascara, 0.20)
 cv2.imshow('Mascara contornos', mascara2)
-
+img = rescaleFrame(img, 0.20)
+blur = rescaleFrame(blur, 0.20)
+cv2.imshow('original', img)
+cv2.imshow('blur', blur)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

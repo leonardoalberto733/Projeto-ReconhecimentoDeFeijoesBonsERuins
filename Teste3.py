@@ -2,6 +2,14 @@ import cv2
 import numpy as np
 from sklearn.cluster import KMeans
 
+
+def rescaleFrame(frame, scale=0.75):
+    width = int(frame.shape[1] * scale)
+    heigth = int(frame.shape[0] * scale)
+    dimensions = (width, heigth)
+    return cv2.resize(frame, dimensions, interpolation=cv2.INTER_AREA)
+
+
 # Carrega imagem
 img = cv2.imread('Feijoes-editados/img1.jpg')
 
@@ -37,6 +45,11 @@ for i, contorno in enumerate(contornos):
 
     # Armazena [id, R, G, B]
     caracteristicas.append([i, int(cor_dominante[2]), int(cor_dominante[1]), int(cor_dominante[0])])  # RGB
+
+    cv2.imshow('feijao_segmentado {i}', rescaleFrame(feijao_segmentado, 0.20))
+    cv2.waitKey(0)
+    if i > 100:
+        break
 
 # Converte para array NumPy
 caracteristicas = np.array(caracteristicas)
