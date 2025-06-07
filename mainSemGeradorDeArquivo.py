@@ -3,11 +3,10 @@ import numpy as np
 from sklearn.cluster import KMeans
 import pandas as pd
 
-# Lista das imagens (3 bons, 3 ruins)
-#reservei a img4 (bom) e a img8 (ruim) para teste
+# Lista das imagens (4 bons, 4 ruins)
 feijoes = [
-    'Feijoes-editados/img1.jpg', 'Feijoes-editados/img2.jpg', 'Feijoes-editados/img3.jpg',
-    'Feijoes-editados/img5.jpg', 'Feijoes-editados/img6.jpg', 'Feijoes-editados/img7.jpg',
+    'Feijoes-editados/img1.jpg', 'Feijoes-editados/img2.jpg', 'Feijoes-editados/img3.jpg', 'Feijoes-editados/img4.jpg',
+    'Feijoes-editados/img5.jpg', 'Feijoes-editados/img6.jpg', 'Feijoes-editados/img7.jpg', 'Feijoes-editados/img8.jpg'
 ]
 
 def rescaleFrame(frame, scale=0.75):
@@ -20,9 +19,8 @@ caracteristicas = []  # Lista para acumular todas as características
 
 global_id = 0  # ID global para feijões
 
-for x in range(6):
-    print(f'processando a imagem {x}...')
-    if x <= 2:
+for x in range(8):
+    if x <= 3:
         ehBom = 1
     else:
         ehBom = 0
@@ -81,9 +79,13 @@ for x in range(6):
 
             global_id += 1
 
-#criando arquivo CSV
-colunas = ['ID', 'R', 'G', 'B', 'Saturação', 'Claros', 'Escuros', 'Textura', 'Circularidade', 'ehBom']
-df = pd.DataFrame(caracteristicas, columns=colunas)
-df.to_csv('feijoes_caracteristicas.csv', index=False)
-print("Arquivo 'feijoes_caracteristicas.csv' salvo com sucesso!")
-
+# Impressão formatada
+print("Matriz de características:")
+for linha in caracteristicas:
+    linha_formatada = []
+    for elem in linha:
+        if isinstance(elem, float):
+            linha_formatada.append(f"{elem:.3f}")
+        else:
+            linha_formatada.append(str(int(elem)))
+    print(linha_formatada)
