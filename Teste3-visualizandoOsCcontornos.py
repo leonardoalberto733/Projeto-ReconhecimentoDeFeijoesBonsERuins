@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from sklearn.cluster import KMeans
+import time
 
 def rescaleFrame(frame, scale=0.75):
     width = int(frame.shape[1] * scale)
@@ -40,12 +41,12 @@ img_contornos = img.copy()
 
 for contorno in contornos:
     area = cv2.contourArea(contorno)
-    if 700 <= area <= 10000:
+    if 0 <= area <= 20000:
         cv2.drawContours(mascara, [contorno], -1, 255, 2)
 
 
-mascara = rescaleFrame(mascara, 0.20)
-cv2.imshow('contornos', mascara)
+mascara2 = rescaleFrame(mascara, 0.20)
+cv2.imshow('contornos', mascara2)
 
 
 cv2.waitKey(0)
