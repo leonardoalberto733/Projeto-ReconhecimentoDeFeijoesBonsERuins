@@ -10,7 +10,7 @@ def rescaleFrame(frame, scale=0.75):
     return cv2.resize(frame, dimensions, interpolation=cv2.INTER_AREA)
 
 # Carrega imagem
-img = cv2.imread('Feijoes-editados/img1.jpg')
+img = cv2.imread('Feijoes-editados/img8.jpg')
 
 # Pré-processamento
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
