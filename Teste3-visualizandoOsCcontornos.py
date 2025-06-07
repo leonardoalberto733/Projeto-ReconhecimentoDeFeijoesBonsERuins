@@ -16,7 +16,7 @@ img = cv2.imread('Feijoes-editados/img1.jpg')
 
 # Pré-processamento
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-blur = cv2.GaussianBlur(gray, (5, 5), 0)
+blur = cv2.GaussianBlur(gray, (7, 7), 0)
 edges = cv2.Canny(blur, 50, 150)
 
 # Contornos
@@ -32,5 +32,21 @@ cv2.drawContours(img_contornos, contornos, -1, (0, 255, 0), 2)
 img_contornos = rescaleFrame(img_contornos, 0.20)
 
 cv2.imshow('Contornos', img_contornos)
+
+
+
+mascara = np.zeros_like(gray)
+img_contornos = img.copy()
+
+for contorno in contornos:
+    area = cv2.contourArea(contorno)
+    if 700 <= area <= 10000:
+        cv2.drawContours(mascara, [contorno], -1, 255, 2)
+
+
+mascara = rescaleFrame(mascara, 0.20)
+cv2.imshow('contornos', mascara)
+
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()
