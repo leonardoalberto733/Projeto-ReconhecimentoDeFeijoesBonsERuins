@@ -1,3 +1,38 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
+# Passo 1: ler os dados
+df = pd.read_csv('feijoes_caracteristicas.csv')
+
+# Passo 2: separar features e label
+X = df.drop(columns=['ID', 'ehBom']).values  # características (sem ID e sem a classe)
+y = df['ehBom'].values                        # classes (0 ou 1)
+
+# Passo 3: dividir em treino e teste (exemplo 80% treino, 20% teste)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Passo 4: criar e treinar o modelo MLP (rede neural multicamada)
+mlp = MLPClassifier(hidden_layer_sizes=(50, ), max_iter=500, random_state=42)
+mlp.fit(X_train, y_train)
+
+# Passo 5: avaliar no conjunto de teste
+y_pred = mlp.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Acurácia no teste: {accuracy*100:.2f}%\n")
+
+print("Relatório de classificação:")
+print(classification_report(y_test, y_pred))
+
+
+
+
+
+
+
+
+
 import cv2
 import numpy as np
 from sklearn.cluster import KMeans
@@ -5,19 +40,16 @@ import pandas as pd
 
 # Lista das imagens (3 bons, 3 ruins)
 #reservei a img4 (bom) e a img8 (ruim) para teste
-feijoes = [
-    'Feijoes-editados/img1.jpg', 'Feijoes-editados/img2.jpg', 'Feijoes-editados/img3.jpg', 'Feijoes-editados/img4.jpg'
-    'Feijoes-editados/img5.jpg', 'Feijoes-editados/img6.jpg', 'Feijoes-editados/img7.jpg','Feijoes-editados/img8.jpg'
-]
+feijoes = ['Feijoes-editados/img8.jpg']
 
 caracteristicas = []  # Lista para acumular todas as características
 
 global_id = 0  # ID global para feijões
 
-for x in range(8):
+for x in range(1):
     print(f'processando a imagem {x}...')
     if x <= 3:
-        ehBom = 1
+        ehBom = 0
     else:
         ehBom = 0
 
@@ -78,6 +110,28 @@ for x in range(8):
 #criando arquivo CSV
 colunas = ['ID', 'R', 'G', 'B', 'Saturação', 'Claros', 'Escuros', 'Textura', 'Circularidade', 'ehBom']
 df = pd.DataFrame(caracteristicas, columns=colunas)
-df.to_csv('feijoes_caracteristicas.csv', index=False)
+df.to_csv('feijoesTeste.csv', index=False)
 print("Arquivo 'feijoes_caracteristicas.csv' salvo com sucesso!")
+
+
+
+
+
+# Carregar os dados do novo CSV
+novos_df = pd.read_csv('feijoesTeste.csv')
+
+# Remover colunas ID e ehBom (se existirem)
+novos_X = novos_df.drop(columns=['ID', 'ehBom']).values
+
+# Fazer a previsão com a rede treinada
+predicoes = mlp.predict(novos_X)
+
+a = 0
+# Exibir os resultados
+for i, pred in enumerate(predicoes):
+    classe = 'Bom' if pred == 1 else 'Ruim'
+    print(f"Feijão {i+1} é classificado como: {classe}")
+    if pred != 1:
+        a = a+1
+print(a)
 
