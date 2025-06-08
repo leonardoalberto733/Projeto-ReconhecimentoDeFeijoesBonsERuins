@@ -18,7 +18,7 @@ caracteristicas = []  # Lista para acumular todas as características
 print('processando a imagem...')
 
 ehBom = 2 #!!!!!!!!!!!!!
-img = cv2.imread('Feijoes-editados/img5.jpg')
+img = cv2.imread('Feijoes-editados/img7.jpg')
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 blur = cv2.GaussianBlur(gray, (17, 17), 0)
@@ -101,7 +101,7 @@ for i, pred in enumerate(predicoes):
 for j, pred in enumerate(predicoes):
     idx_original = contornos_validos_idx[j]
     cor = (0, 255, 0) if pred == 1 else (0, 0, 255)  # Verde se bom, vermelho se ruim
-    cv2.drawContours(img, contornos, idx_original, cor, 5)
+    cv2.drawContours(img, contornos, idx_original, cor, 10)
 
 # Mostrar ou salvar a imagem resultante
 #img = rescaleFrame(img, 0.20)
